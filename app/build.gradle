@@ -1,0 +1,62 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion "23.0.1"
+    defaultConfig {
+        applicationId "com.tunebrains.keystoresampple"
+        minSdkVersion 14
+        targetSdkVersion 20
+        versionCode 1
+        versionName "1.0"
+    }
+    signingConfigs {
+        Flavor1 {
+            storeFile file("../release_key.keystore")
+            storePassword "password"
+            keyAlias "flavor1"
+            keyPassword "password1"
+        }
+        Flavor2 {
+            storeFile file("../release_key.keystore")
+            storePassword "password"
+            keyAlias "flavor2"
+            keyPassword "password2"
+        }
+
+    }
+
+    productFlavors {
+
+        flavor1 {
+            applicationId 'com.tunebrains.keystoresample1'
+            versionName '10'
+            buildConfigField "String", "ANOTHER_PROVIDER_URI", "\"com.tunebrains.keystoresample2.provider\""
+            buildConfigField "String", "MY_PROVIDER_URI", "\"com.tunebrains.keystoresample1.provider\""
+            signingConfig signingConfigs.Flavor1
+        }
+        flavor2 {
+            applicationId 'com.tunebrains.keystoresample2'
+            versionName '10'
+            buildConfigField "String", "ANOTHER_PROVIDER_URI", "\"com.tunebrains.keystoresample1.provider\""
+            buildConfigField "String", "MY_PROVIDER_URI", "\"com.tunebrains.keystoresample2.provider\""
+            signingConfig signingConfigs.Flavor2
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    testCompile 'junit:junit:4.12'
+    compile 'com.android.support:appcompat-v7:23.0.1'
+}
